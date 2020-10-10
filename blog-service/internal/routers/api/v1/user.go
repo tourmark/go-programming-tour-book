@@ -6,41 +6,56 @@ import (
 	"log"
 )
 
-type User struct {
+type UserPO struct {
 	Id int32 `json:"id"`
 	Name sql.NullString `json:"name"`
 	Create_time sql.NullString `json:"create_time"`
 }
 
-func NewUser() User {
-	return User{}
+type UserDTO struct {
+	Id int32 `json:"id"`
+	Name string `json:"name"`
+	Create_time string `json:"create_time"`
 }
 
-
-func (t User) Get(){
-
-
+func NewUser() UserDTO {
+	return UserDTO{}
 }
-func (t User) List(c *gin.Context,db *sql.DB)[]User{
-	var userList []User
+
+func (t UserDTO) List(c *gin.Context,db *sql.DB)[]UserDTO{
+	var userList []UserPO
 	mSql := "select * from user"
 	rows, err := db.Query(mSql)
 	if err !=nil{
 		log.Fatalf("error is %v/n",err)
-		return userList
+		return nil
 	}
 	for rows.Next(){
-		var user User
+		var user UserPO
 		err := rows.Scan(&user.Id,&user.Name,&user.Create_time)
 		if err !=nil{
 			log.Fatalf("error is %v/n",err)
-			return userList
+			return nil
 		}
 		userList = append(userList, user)
 	}
+	var userListNew []UserDTO
+	for _,x:=range userList{
+		var userNew UserDTO
+		userNew.Id=x.Id
+		if x.Name.Valid {
+			userNew.Name=x.Name.String
+		}else {
+			userNew.Name="NULL"
+		}
+		if x.Create_time.Valid {
+			userNew.Create_time=x.Create_time.String
+		}else {
+			userNew.Create_time="NULL"
+		}
+		userListNew = append(userListNew, userNew)
+	}
 
-	return userList
+	return userListNew
 }
-func (t User) Create(c *gin.Context){}
-func (t User) Update(c *gin.Context){}
-func (t User) Delete(c *gin.Context){}
+
