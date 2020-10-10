@@ -6,7 +6,8 @@ Server:
 Database:
   DBType: mysql
   Username: root
-  Pwd: root
+  Pwd: 123456
   Host: 127.0.0.1:3306
-  database: demo
+  Database: demo
   Charset: utf-8
+

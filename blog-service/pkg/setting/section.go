@@ -1,18 +1,20 @@
-package configs
+package setting
 
-import (
-	_ "github.com/go-programming-tour-book/blog-service/pkg/setting"
-)
 
 type DatabaseSettingS struct {
 	DBType   string
-	UserName string
+	Username string
 	Pwd      string
 	Host     string
-	DBName   string
+	Database   string
 	Charset  string
 }
 
+
 func (s *Setting) ReadSection(k string, v interface{}) error {
-	return nill
+	err := s.vp.UnmarshalKey(k, v)
+	if err != nil {
+		return err
+	}
+	return nil
 }
