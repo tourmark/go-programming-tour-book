@@ -8,3 +8,5 @@ Database:
   Username: root
   Pwd: root
   Host: 127.0.0.1:3306
+  database: demo
+  Charset: utf-8
